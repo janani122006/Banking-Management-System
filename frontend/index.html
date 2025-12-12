@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Banking System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo-container">
+                <i class="fas fa-university logo-icon"></i>
+                <h1 class="logo-text">SecureBank</h1>
+            </div>
+            <div class="header-info">
+                <div class="current-time">
+                    <i class="far fa-clock"></i>
+                    <span id="datetime"></span>
+                </div>
+                <div class="security-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>256-bit Secure</span>
+                </div>
+                <div class="api-status" id="apiStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>API: Checking...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Left Panel - Banking Menu -->
+            <aside class="side-panel">
+                <h2 class="panel-title">
+                    <i class="fas fa-bank"></i>
+                    Banking Services
+                </h2>
+                
+                <nav class="menu">
+                    <div class="menu-item active" data-target="create-account">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Create Account</span>
+                    </div>
+                    <div class="menu-item" data-target="deposit">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Deposit Money</span>
+                    </div>
+                    <div class="menu-item" data-target="withdraw">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span>Withdraw Money</span>
+                    </div>
+                    <div class="menu-item" data-target="balance">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>View Balance</span>
+                    </div>
+                    <div class="menu-item" data-target="transactions">
+                        <i class="fas fa-history"></i>
+                        <span>Transaction History</span>
+                    </div>
+                </nav>
+                
+                <div class="quick-info">
+                    <h3><i class="fas fa-info-circle"></i> Banking Tips</h3>
+                    <ul>
+                        <li>Keep your account details secure</li>
+                        <li>Regularly check your transaction history</li>
+                        <li>Set up account alerts for security</li>
+                        <li>Contact support for any suspicious activity</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Right Panel - Content Area -->
+            <section class="content-panel">
+                <!-- Welcome Banner -->
+                <div class="welcome-banner">
+                    <h2>Welcome to SecureBank</h2>
+                    <p>Your trusted partner for secure and convenient banking</p>
+                </div>
+
+                <!-- Form Container (Changes based on menu selection) -->
+                <div class="form-container">
+                    <!-- Create Account Form (Default) -->
+                    <div id="create-account" class="form-section active">
+                        <h3><i class="fas fa-user-plus"></i> Create New Account</h3>
+                        <form id="createAccountForm">
+                            <div class="form-group">
+                                <label for="name"><i class="far fa-user"></i> Full Name</label>
+                                <input type="text" id="name" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="initialBalance"><i class="fas fa-wallet"></i> Initial Deposit</label>
+                                <div class="input-with-icon">
+                                    <span class="currency">$</span>
+                                    <input type="number" id="initialBalance" min="10" step="0.01" placeholder="10.00" required>
+                                </div>
+                                <small class="hint">Minimum deposit: $10.00</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="accountType"><i class="fas fa-credit-card"></i> Account Type</label>
+                                <select id="accountType">
+                                    <option value="savings">Savings Account</option>
+                                    <option value="checking">Checking Account</option>
+                                    <option value="business">Business Account</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check-circle"></i> Create Account
+                            </button>
+                            <div class="form-loading" id="createAccountLoading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Creating account...
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Deposit Money Form -->
+                    <div id="deposit" class="form-section">
+                        <h3><i class="fas fa-money-bill-wave"></i> Deposit Money</h3>
+                        <form id="depositForm">
+                            <div class="form-group">
+                                <label for="depositAccNo"><i class="fas fa-id-card"></i> Account Number</label>
+                                <input type="number" id="depositAccNo" placeholder="Enter account number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="depositAmount"><i class="fas fa-coins"></i> Deposit Amount</label>
+                                <div class="input-with-icon">
+                                    <span class="currency">$</span>
+                                    <input type="number" id="depositAmount" min="0.01" step="0.01" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-arrow-circle-down"></i> Deposit Funds
+                            </button>
+                            <div class="form-loading" id="depositLoading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Processing deposit...
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Withdraw Money Form -->
+                    <div id="withdraw" class="form-section">
+                        <h3><i class="fas fa-hand-holding-usd"></i> Withdraw Money</h3>
+                        <form id="withdrawForm">
+                            <div class="form-group">
+                                <label for="withdrawAccNo"><i class="fas fa-id-card"></i> Account Number</label>
+                                <input type="number" id="withdrawAccNo" placeholder="Enter account number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="withdrawAmount"><i class="fas fa-coins"></i> Withdrawal Amount</label>
+                                <div class="input-with-icon">
+                                    <span class="currency">$</span>
+                                    <input type="number" id="withdrawAmount" min="0.01" step="0.01" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-arrow-circle-up"></i> Withdraw Funds
+                            </button>
+                            <div class="form-loading" id="withdrawLoading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Processing withdrawal...
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- View Balance Form -->
+                    <div id="balance" class="form-section">
+                        <h3><i class="fas fa-balance-scale"></i> Account Balance</h3>
+                        <form id="balanceForm">
+                            <div class="form-group">
+                                <label for="balanceAccNo"><i class="fas fa-id-card"></i> Account Number</label>
+                                <input type="number" id="balanceAccNo" placeholder="Enter account number" required>
+                            </div>
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-search"></i> Check Balance
+                            </button>
+                            <div class="form-loading" id="balanceLoading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Fetching balance...
+                            </div>
+                        </form>
+                        <div id="balanceResult" class="result-container">
+                            <!-- Balance information will appear here -->
+                        </div>
+                    </div>
+
+                    <!-- Transaction History Form -->
+                    <div id="transactions" class="form-section">
+                        <h3><i class="fas fa-history"></i> Transaction History</h3>
+                        <form id="transactionsForm">
+                            <div class="form-group">
+                                <label for="transAccNo"><i class="fas fa-id-card"></i> Account Number</label>
+                                <input type="number" id="transAccNo" placeholder="Enter account number" required>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fas fa-file-invoice-dollar"></i> View History
+                            </button>
+                            <div class="form-loading" id="transactionsLoading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Loading transactions...
+                            </div>
+                        </form>
+                        <div id="transactionsResult" class="result-container">
+                            <!-- Transaction history will appear here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result/Message Display Area -->
+                <div class="result-area">
+                    <div class="result-header">
+                        <h3><i class="fas fa-bell"></i> Notifications & Results</h3>
+                        <button id="clearResults" class="btn-small"><i class="fas fa-trash"></i> Clear</button>
+                    </div>
+                    <div id="messageContainer" class="message-container">
+                        <div class="message welcome">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Welcome to SecureBank! Please select a service from the menu to begin.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SecureBank</h4>
+                    <p>Your trusted financial partner since 1995</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-phone"></i> 1-800-BANKING</p>
+                    <p><i class="fas fa-envelope"></i> support@securebank.com</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Hours</h4>
+                    <p>24/7 Online Banking</p>
+                    <p>Branch: Mon-Fri 9am-5pm</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 SecureBank. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript for API Integration -->
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        // Update current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const datetime = now.toLocaleString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('datetime').textContent = datetime;
+        }
+        
+        // Check API health status
+        async function checkAPIHealth() {
+            const apiStatus = document.getElementById('apiStatus');
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                if (response.ok) {
+                    apiStatus.innerHTML = '<i class="fas fa-circle" style="color: #28a745;"></i><span>API: Connected</span>';
+                } else {
+                    apiStatus.innerHTML = '<i class="fas fa-circle" style="color: #dc3545;"></i><span>API: Disconnected</span>';
+                }
+            } catch (error) {
+                apiStatus.innerHTML = '<i class="fas fa-circle" style="color: #dc3545;"></i><span>API: Error</span>';
+                addMessage('API connection failed. Make sure the backend server is running.', 'error');
+            }
+        }
+        
+        // Handle menu navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all menu items
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all form sections
+                document.querySelectorAll('.form-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show the selected form section
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+        
+        // Handle Create Account form submission
+        document.getElementById('createAccountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const balance = parseFloat(document.getElementById('initialBalance').value);
+            const accountType = document.getElementById('accountType').value;
+            
+            if (!name) {
+                addMessage('Please enter your full name.', 'error');
+                return;
+            }
+            
+            if (balance < 10) {
+                addMessage('Minimum initial deposit is $10.00.', 'error');
+                return;
+            }
+            
+            // Show loading
+            const loadingElement = document.getElementById('createAccountLoading');
+            loadingElement.style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/create_account`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        balance: balance
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addMessage(`Account created successfully! Account Number: ${result.account_number}, Name: ${result.name}, Initial Balance: $${result.balance.toFixed(2)}`, 'success');
+                    
+                    // Clear form
+                    this.reset();
+                    document.getElementById('initialBalance').value = '10.00';
+                } else {
+                    addMessage(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addMessage('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        });
+        
+        // Handle Deposit form submission
+        document.getElementById('depositForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const accNo = parseInt(document.getElementById('depositAccNo').value);
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            
+            if (!accNo || accNo <= 0) {
+                addMessage('Please enter a valid account number.', 'error');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                addMessage('Please enter a valid deposit amount.', 'error');
+                return;
+            }
+            
+            // Show loading
+            const loadingElement = document.getElementById('depositLoading');
+            loadingElement.style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/deposit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        acc_no: accNo,
+                        amount: amount
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addMessage(`Successfully deposited $${amount.toFixed(2)} to account #${accNo}. New balance: $${result.new_balance.toFixed(2)}`, 'success');
+                    this.reset();
+                } else {
+                    addMessage(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addMessage('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        });
+        
+        // Handle Withdraw form submission
+        document.getElementById('withdrawForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const accNo = parseInt(document.getElementById('withdrawAccNo').value);
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            
+            if (!accNo || accNo <= 0) {
+                addMessage('Please enter a valid account number.', 'error');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                addMessage('Please enter a valid withdrawal amount.', 'error');
+                return;
+            }
+            
+            // Show loading
+            const loadingElement = document.getElementById('withdrawLoading');
+            loadingElement.style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/withdraw`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        acc_no: accNo,
+                        amount: amount
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addMessage(`Successfully withdrew $${amount.toFixed(2)} from account #${accNo}. New balance: $${result.new_balance.toFixed(2)}`, 'warning');
+                    this.reset();
+                } else {
+                    addMessage(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addMessage('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        });
+        
+        // Handle Balance check form submission
+        document.getElementById('balanceForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const accNo = parseInt(document.getElementById('balanceAccNo').value);
+            
+            if (!accNo || accNo <= 0) {
+                addMessage('Please enter a valid account number.', 'error');
+                return;
+            }
+            
+            // Show loading
+            const loadingElement = document.getElementById('balanceLoading');
+            loadingElement.style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/balance/${accNo}`);
+                const result = await response.json();
+                
+                const resultDiv = document.getElementById('balanceResult');
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="balance-display">
+                            <div class="balance-header">
+                                <i class="fas fa-user-circle"></i>
+                                <h4>Account Information</h4>
+                            </div>
+                            <div class="balance-details">
+                                <div class="balance-row">
+                                    <span>Account Number:</span>
+                                    <strong>${result.account_number}</strong>
+                                </div>
+                                <div class="balance-row">
+                                    <span>Account Holder:</span>
+                                    <strong>${result.name}</strong>
+                                </div>
+                                <div class="balance-row highlight">
+                                    <span>Current Balance:</span>
+                                    <strong class="balance-amount">$${result.balance.toFixed(2)}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    addMessage(`Balance checked for account #${accNo}`, 'info');
+                    this.reset();
+                } else {
+                    resultDiv.innerHTML = '';
+                    addMessage(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addMessage('Network error. Please check your connection and try again.', 'error');
+                document.getElementById('balanceResult').innerHTML = '';
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        });
+        
+        // Handle Transaction History form submission
+        document.getElementById('transactionsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const accNo = parseInt(document.getElementById('transAccNo').value);
+            
+            if (!accNo || accNo <= 0) {
+                addMessage('Please enter a valid account number.', 'error');
+                return;
+            }
+            
+            // Show loading
+            const loadingElement = document.getElementById('transactionsLoading');
+            loadingElement.style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/transactions/${accNo}`);
+                const result = await response.json();
+                
+                const resultDiv = document.getElementById('transactionsResult');
+                
+                if (result.success) {
+                    let transactionsHTML = '<div class="transactions-list">';
+                    
+                    if (result.transactions.length > 0) {
+                        result.transactions.forEach(trans => {
+                            const typeClass = trans.type.toLowerCase().includes('deposit') ? "deposit" : "withdrawal";
+                            const icon = trans.type.toLowerCase().includes('deposit') ? 'arrow-down' : 'arrow-up';
+                            
+                            transactionsHTML += `
+                                <div class="transaction-item ${typeClass}">
+                                    <div class="transaction-type">
+                                        <i class="fas fa-${icon}"></i>
+                                        <span>${trans.type}</span>
+                                    </div>
+                                    <div class="transaction-amount">$${parseFloat(trans.amount).toFixed(2)}</div>
+                                    <div class="transaction-date">${trans.date}</div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        transactionsHTML += `
+                            <div class="no-transactions">
+                                <i class="fas fa-info-circle"></i>
+                                <p>No transactions found for this account.</p>
+                            </div>
+                        `;
+                    }
+                    
+                    transactionsHTML += '</div>';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="transactions-container">
+                            <div class="transactions-header">
+                                <i class="fas fa-file-alt"></i>
+                                <h4>Transaction History for Account #${accNo} (${result.name})</h4>
+                            </div>
+                            <div class="transactions-summary">
+                                <p>Total Transactions: ${result.count}</p>
+                            </div>
+                            ${transactionsHTML}
+                        </div>
+                    `;
+                    
+                    addMessage(`Transaction history retrieved for account #${accNo}`, 'info');
+                    this.reset();
+                } else {
+                    resultDiv.innerHTML = '';
+                    addMessage(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addMessage('Network error. Please check your connection and try again.', 'error');
+                document.getElementById('transactionsResult').innerHTML = '';
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        });
+        
+        // Clear results button
+        document.getElementById('clearResults').addEventListener('click', function() {
+            document.getElementById('messageContainer').innerHTML = '';
+            addMessage('All messages cleared.', 'info');
+        });
+        
+        // Function to add messages to the message container
+        function addMessage(text, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            if (type === 'error') icon = 'exclamation-circle';
+            
+            const now = new Date();
+            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <i class="fas fa-${icon}"></i>
+                <div class="message-content">
+                    <p>${text}</p>
+                    <small class="message-time">${time}</small>
+                </div>
+            `;
+            
+            // Add to top of container
+            messageContainer.insertBefore(messageDiv, messageContainer.firstChild);
+            
+            // Limit to 5 messages
+            if (messageContainer.children.length > 5) {
+                messageContainer.removeChild(messageContainer.lastChild);
+            }
+        }
+        
+        // Initialize
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        
+        // Check API health on load and every 30 seconds
+        checkAPIHealth();
+        setInterval(checkAPIHealth, 30000);
+        
+        // Initial welcome message
+        setTimeout(() => {
+            addMessage('System initialized. Connect to your backend API for full functionality.', 'info');
+        }, 1000);
+    </script>
+</body>
+</html>
